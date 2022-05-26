@@ -34,7 +34,6 @@ if (empty($uri)) {
 }
 
 $mapping = new MappingController();
-$mapKey = true;
 
 if ($controller === 'Authentication') {
     foreach ($mapping->mapAuthRoutes() as $mapRoute) {
@@ -42,7 +41,7 @@ if ($controller === 'Authentication') {
         $key = $map->run();
 
         if ($key === false) {
-            $mapKey = false;
+            die();
         }
     }
 } else {
@@ -51,13 +50,9 @@ if ($controller === 'Authentication') {
         $key = $map->run();
 
         if ($key === false) {
-            $mapKey = false;
+            die();
         }
     }
-}
-
-if (!$mapKey) {
-    die();
 }
 
 $controller = new $controller();
