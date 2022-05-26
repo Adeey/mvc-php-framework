@@ -23,8 +23,17 @@ class Authentication extends MainController
 
             setcookie('token', $authToken, time()+3600, '/');
 
-            $this->database->query("DELETE FROM `auth_token` WHERE `user_id` = '" . $user['id'] . "'");
-            $this->database->query("INSERT INTO `auth_token` (`token`, `user_id`) VALUES ('" . $authToken . "', '" . $user['id'] . "')");
+            $this->database->table('auth_token')
+                ->delete()
+                ->where('user_id', '=', $user['id'])
+                ->run();
+
+            $this->database->table('auth_token')
+                ->insert([
+                    'token' => $authToken,
+                    'user_id' => $user['id']
+                ])
+                ->run();
 
             redirect ('/index.php/product/list');
         }

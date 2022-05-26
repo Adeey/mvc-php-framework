@@ -1,4 +1,4 @@
-<form action="/index.php/product/create_submit" method="post">
+<form action="/index.php/product/createSubmit" method="post">
     <?php
     if ($items['errors']) {
         echo '<p>' . $items['errors']['message'] . '</p>';

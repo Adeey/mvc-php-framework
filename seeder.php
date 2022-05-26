@@ -10,6 +10,8 @@ fillDatabase($db);
 
 function refreshDatabase($db)
 {
+    $db->query("DROP TABLE IF EXISTS products");
+
     $tables = $db->query("SHOW TABLES");
 
     while ($row = $tables->fetch_array(MYSQLI_NUM)) {

@@ -1,4 +1,4 @@
-<form action="/index.php/product/edit_submit/<?= $items['product']['id'] ?>" method="post">
+<form action="/index.php/product/editSubmit/<?= $items['product']['id'] ?>" method="post">
     <?php
         if ($items['errors']) {
             echo '<p>' . $items['errors']['message'] . '</p>';

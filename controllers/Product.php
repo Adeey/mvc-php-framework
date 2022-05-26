@@ -21,7 +21,7 @@ class Product extends MainController
         $this->view('products/list', $products);
     }
 
-    public function create_form(?array $errors = null): void
+    public function createForm(?array $errors = null): void
     {
         $statuses = $this->getStatuses();
         $category = $this->getCategories();
@@ -29,7 +29,7 @@ class Product extends MainController
         $this->view('products/create', ['statuses' => $statuses, 'category' => $category, 'errors' => $errors]);
     }
 
-    public function create_submit(): void
+    public function createSubmit(): void
     {
         $name = $this->validation->validateName($_POST['name']);
         $description = $this->validation->validateDescription($_POST['description']);
@@ -37,24 +37,22 @@ class Product extends MainController
         $categoryId = $_POST['category'];
 
         if (!$name || !$description) {
-            $this->create_form(['message' => 'name or description invalid']);
+            $this->createForm(['message' => 'name or description invalid']);
         } else {
             $this->database->table('products')
-                ->insert(
-                    [
-                        'name' => $name,
-                        'description' => $description,
-                        'status_id' => $statusId,
-                        'category_id' => $categoryId
-                    ]
-                )
+                ->insert([
+                    'name' => $name,
+                    'description' => $description,
+                    'status_id' => $statusId,
+                    'category_id' => $categoryId
+                ])
                 ->run();
 
             redirect('/index.php/product/list');
         }
     }
 
-    public function edit_form(?int $id = null, ?array $errors = null): void
+    public function editForm(?int $id = null, ?array $errors = null): void
     {
         $product = $this->getProductWithRelations($id);
         $statuses = $this->getStatuses();
@@ -67,28 +65,28 @@ class Product extends MainController
         }
     }
 
-    public function edit_submit(?int $id = null): void
+    public function editSubmit(?int $id = null): void
     {
         $product = $this->getProductWithRelations($id);
 
         if (!$product) {
             $this->view('products/notFound');
-        }
-
-        $name = $this->validation->validateName($_POST['name']);
-        $description = $this->validation->validateDescription($_POST['description']);
-        $statusId = $_POST['status'];
-        $categoryId = $_POST['category'];
-
-        if (!$name || !$description) {
-            $this->edit_form($id, ['message' => 'name or description invalid']);
         } else {
-            $this->database->table('products')
-                ->update(['name' => $name, 'description' => $description, 'category_id' => $categoryId, 'status_id' => $statusId])
-                ->where('id', '=', $id)
-                ->run();
+            $name = $this->validation->validateName($_POST['name']);
+            $description = $this->validation->validateDescription($_POST['description']);
+            $statusId = $_POST['status'];
+            $categoryId = $_POST['category'];
 
-            redirect('/index.php/product/list');
+            if (!$name || !$description) {
+                $this->editForm($id, ['message' => 'name or description invalid']);
+            } else {
+                $this->database->table('products')
+                    ->update(['name' => $name, 'description' => $description, 'category_id' => $categoryId, 'status_id' => $statusId])
+                    ->where('id', '=', $id)
+                    ->run();
+
+                redirect('/index.php/product/list');
+            }
         }
     }
 

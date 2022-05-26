@@ -129,7 +129,7 @@
     }
 </style>
 <h2>Products list</h2>
-<a href="/index.php/product/create_form">CREATE NEW PRODUCT</a>
+<a href="/index.php/product/createForm">CREATE NEW PRODUCT</a>
 <div class="table-wrapper">
     <table class="fl-table">
         <thead>
@@ -152,7 +152,7 @@
                     echo '<td>' . $product['description'] . '</td>';
                     echo '<td>' . $product['statusName'] . '</td>';
                     echo '<td>' . $product['categoryName'] . '</td>';
-                    echo '<td><a href="/index.php/product/edit_form/' . $product['id'] . '">Edit</a></td>';
+                    echo '<td><a href="/index.php/product/editForm/' . $product['id'] . '">Edit</a></td>';
                     echo '<td><a href="/index.php/product/delete/' . $product['id'] . '">X</a></td>';
                     echo '</tr>';
                 }
