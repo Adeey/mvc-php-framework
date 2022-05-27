@@ -15,16 +15,12 @@ class Auth extends MainController implements MapServicesInterface
                 ->where('token', '=', $_COOKIE['token'])
                 ->first();
         } else {
-            $this->view('auth/login');
-
-            return false;
+            redirect('/index.php/authentication/login');
         }
 
 
         if (!$user) {
-            $this->view('auth/login');
-
-            return false;
+            redirect('/index.php/authentication/login');
         } else {
             return true;
         }

@@ -34,24 +34,22 @@ if (empty($uri)) {
 }
 
 $mapping = new MappingController();
+$controllersWithoutMiddleware = $mapping->controllersWithoutMiddleware();
 
-if ($controller === 'Authentication') {
-    foreach ($mapping->mapAuthRoutes() as $mapRoute) {
-        $map = new $mapRoute();
-        $key = $map->run();
-
-        if ($key === false) {
-            die();
-        }
+foreach ($mapping->mapRoutes() as $mapRoute) {
+    if (
+        isset($controllersWithoutMiddleware[$controller])
+        &&
+        in_array($mapRoute, $controllersWithoutMiddleware[$controller])
+    ) {
+        continue;
     }
-} else {
-    foreach ($mapping->mapRoutes() as $mapRoute) {
-        $map = new $mapRoute();
-        $key = $map->run();
 
-        if ($key === false) {
-            die();
-        }
+    $map = new $mapRoute();
+    $key = $map->run();
+
+    if ($key === false) {
+        die();
     }
 }
 

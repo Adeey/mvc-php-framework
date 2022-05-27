@@ -2,13 +2,15 @@
 
 class MappingController
 {
-    public function mapAuthRoutes()
-    {
-        return [];
-    }
-
     public function mapRoutes()
     {
         return ['auth'];
+    }
+
+    public function controllersWithoutMiddleware()
+    {
+        return [
+            'Authentication' => ['auth']
+        ];
     }
 }

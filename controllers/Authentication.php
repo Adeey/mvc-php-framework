@@ -7,6 +7,11 @@ class Authentication extends MainController
         $this->load('database');
     }
 
+    public function login(): void
+    {
+        $this->view('auth/login');
+    }
+
     public function submit(): void
     {
         $user = $this->database->table('users')
@@ -15,7 +20,7 @@ class Authentication extends MainController
             ->where('password', '=', $_POST['password'])
             ->first();
 
-        if ($user === null) {
+        if (!$user) {
             echo 'user not found';
             $this->view('auth/login');
         } else {
@@ -35,7 +40,7 @@ class Authentication extends MainController
                 ])
                 ->run();
 
-            redirect ('/index.php/product/list');
+            redirect('/index.php/product/list');
         }
     }
 }
