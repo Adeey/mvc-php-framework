@@ -1,6 +1,11 @@
 <?php
 
-include_once 'autoloader.php';
+define('BASE_PATH', realpath(dirname(__FILE__)));
+
+include_once 'system\autoloader.php';
+
+use System\Autoload;
+use System\Core\Helpers\Database;
 
 Autoload::init();
 
@@ -60,4 +65,3 @@ function fillDatabase($db)
     $db->query("INSERT INTO `product_category` (`name`) VALUES ('apple'), ('samsung'), ('huawei')");
     $db->query("INSERT INTO `products` (`name`, `description`, `status_id`, `category_id`) VALUES ('product1', 'lorem ipsum product 1 description', 1, 1), ('product2', 'lorem ipsum product 2 description', 2, 2), ('product3', 'lorem ipsum product 3 description', 3, 3)");
 }
-

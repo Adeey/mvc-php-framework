@@ -1,5 +1,10 @@
 <?php
 
+namespace System\Core\Helpers;
+
+use mysqli;
+use System\Config\DBConfig;
+
 class Database
 {
     private ?mysqli $db;
@@ -20,18 +25,24 @@ class Database
                 DBConfig::DATABASE,
                 DBConfig::PORT
             );
-        } else {
+        }
+
+        if ($db) {
             $this->db = $db;
+        }
+
+        if ($table) {
             $this->modifyTable = $table;
+        }
+
+        if ($query) {
             $this->query = $query;
         }
     }
 
-    public function table(string $table)
+    public static function table(string $table)
     {
-        $this->modifyTable = $table;
-
-        return new self($this->db, $this->modifyTable);
+        return new self(null, $table);
     }
 
     public function join(string $table)
@@ -81,9 +92,9 @@ class Database
     public function where($field, $sep, $value)
     {
         if (strstr($this->query, 'WHERE')) {
-            $this->query .= " AND `" . $field . "` " . $sep . " '" . $value . "'";
+            $this->query .= " AND `" . $field . "` " . $sep . " '" . $this->escapeString($value) . "'";
         } else {
-            $this->query .= " WHERE `" . $field . "` " . $sep . " '" . $value . "'";
+            $this->query .= " WHERE `" . $field . "` " . $sep . " '" . $this->escapeString($value) . "'";
         }
 
         return new self($this->db, $this->modifyTable, $this->query);
@@ -121,9 +132,9 @@ class Database
 
         foreach ($params as $key => $item) {
             if (strstr($this->query, 'SET')) {
-                $this->query .= ", `" . $key . "` = '" . $item . "'";
+                $this->query .= ", `" . $key . "` = '" . $this->escapeString($item) . "'";
             } else {
-                $this->query .= "SET `" . $key . "` = '" . $item . "'";
+                $this->query .= "SET `" . $key . "` = '" . $this->escapeString($item) . "'";
             }
         }
 
@@ -142,7 +153,7 @@ class Database
         $this->query .= ') VALUES (';
 
         foreach (array_values($params) as $value) {
-            $this->query .= "'" . $value . "',";
+            $this->query .= "'" . $this->escapeString($value) . "',";
         }
 
         $this->query = substr_replace($this->query ,'', -1);
@@ -175,5 +186,10 @@ class Database
             $response[] = $value->fetch_assoc();
         }
         return $response;
+    }
+
+    private function escapeString($value)
+    {
+        return $this->db->real_escape_string($value);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace System\Config;
+
 class DBConfig
 {
     const HOST = 'localhost';

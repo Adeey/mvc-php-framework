@@ -129,6 +129,7 @@
     }
 </style>
 <h2>Products list</h2>
+<p>Hi <?php if (isset($items['user']['login'])) { echo $items['user']['login']; } ?>!</p>
 <a href="/index.php/product/createForm">CREATE NEW PRODUCT</a>
 <div class="table-wrapper">
     <table class="fl-table">
@@ -145,7 +146,7 @@
         </thead>
         <tbody>
             <?php
-                foreach ($items as $product) {
+                foreach ($items['products'] as $product) {
                     echo '<tr>';
                     echo '<td>' . $product['id'] . '</td>';
                     echo '<td>' . $product['name'] . '</td>';

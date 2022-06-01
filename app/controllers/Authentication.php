@@ -1,20 +1,19 @@
 <?php
 
-class Authentication extends MainController
-{
-    public function __construct()
-    {
-        $this->load('database');
-    }
+namespace App\Controllers;
 
+use System\Core\Helpers\Database;
+
+class Authentication
+{
     public function login(): void
     {
-        $this->view('auth/login');
+        view('auth/login');
     }
 
     public function submit(): void
     {
-        $user = $this->database->table('users')
+        $user = Database::table('users')
             ->select()
             ->where('login', '=', $_POST['login'])
             ->where('password', '=', $_POST['password'])
@@ -22,25 +21,25 @@ class Authentication extends MainController
 
         if (!$user) {
             echo 'user not found';
-            $this->view('auth/login');
+            $this->login();
         } else {
             $authToken = md5(date('Y-m-d H:i:s') . 'password#000');
 
             setcookie('token', $authToken, time()+3600, '/');
 
-            $this->database->table('auth_token')
+            Database::table('auth_token')
                 ->delete()
                 ->where('user_id', '=', $user['id'])
                 ->run();
 
-            $this->database->table('auth_token')
+            Database::table('auth_token')
                 ->insert([
                     'token' => $authToken,
                     'user_id' => $user['id']
                 ])
                 ->run();
 
-            redirect('/index.php/product/list');
+            redirect('/');
         }
     }
 }
