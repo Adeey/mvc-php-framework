@@ -16,7 +16,6 @@ class Authentication implements MiddlewareInterface
 
         if (!isset($_COOKIE['token'])) {
             redirect('/index.php/authentication/login');
-            return false;
         }
 
         $user = User::check();
@@ -25,7 +24,6 @@ class Authentication implements MiddlewareInterface
             return true;
         } else {
             redirect('/index.php/authentication/login');
-            return false;
         }
     }
 }
